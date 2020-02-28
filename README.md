@@ -28,7 +28,7 @@ Currently the following new features have been [specified in this proposal](http
 
 > Status: Experimental
 
-Rendered Specification: https://guybedford.github.io/import-maps-extensions/
+Rendered Specification: https://guybedford.github.io/import-maps-extensions/#parallelizing
 
 This specifies a new `"depcache"` field in the import map to optimize the latency waterfall of dependency discovery.
 
