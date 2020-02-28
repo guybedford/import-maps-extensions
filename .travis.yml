@@ -20,5 +20,5 @@ notifications:
 
 env:
   global:
-    - ENCRYPTION_LABEL: "d49f480b94f1"
-    - COMMIT_AUTHOR_EMAIL: "d@domenic.me"
+    - ENCRYPTION_LABEL: "b39b94f92b55"
+    - COMMIT_AUTHOR_EMAIL: "guybedford@gmail.com"

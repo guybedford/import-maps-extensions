@@ -6,14 +6,13 @@ _Extending the [import maps](https://github.com/wicg/import-maps) proposal._
 
 The [import maps](https://github.com/wicg/import-maps) proposal is now feature-complete and working towards a stable specification and release in browsers.
 
-In the process of attaining this stability a number of future features were deemed out of scope for the specification, including:
+In the process of attaining this stability a number of future features were deemed out of scope for the specification including, to name a few:
 
 * `import:` URL support (https://github.com/WICG/import-maps/issues/149)
 * Supporting import maps for other execution environments such as Web Workers (https://github.com/WICG/import-maps/issues/2)
 * Optimizing the unbounded latency cost of deep dependency discovery (https://github.com/WICG/import-maps/issues/21)
 * Supporting lazy loading of import maps (https://github.com/WICG/import-maps/issues/92)
 * Supporting multiple import maps (https://github.com/WICG/import-maps/issues/19)
-* Treating import maps as a whitelisting feature for controlling importer contexts (https://github.com/WICG/import-maps/issues/99)
 
 ## Motivation
 
