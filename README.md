@@ -23,11 +23,13 @@ for import maps as the feature in browsers continues to evolve over time.
 
 ## Proposal Summaries
 
-Currently the following new features have been specified in this proposal:
+Currently the following new features have been [specified in this proposal](https://guybedford.github.io/import-maps-extensions/):
 
 ### Depcache
 
 > Status: Experimental
+
+Rendered Specification: https://guybedford.github.io/import-maps-extensions/
 
 This specifies a new `"depcache"` field in the import map to optimize the latency waterfall of dependency discovery.
 
