@@ -167,9 +167,9 @@ An alternative approach to the "waiting problem" of lazy import map definitions 
 
 This way, all resolve calls would be able to wait on the new import maps and we would have a full guarantee of predictability regardless of network profile.
 
-Currently the resolver is not designed to be asynchronous in this way so this would be a larger change. In addition this would lead to an unnecessary delay for in-progress module loads so while it may seem
-at some theoretical level more correct, it may not be the most practical in real workflows. The theoretical correctness to be relied upon is the well-defined nature of immutable map extension and when
-the individual top-level loads are initiated.
+Currently the resolver is not designed to be asynchronous in this way so this would be a larger change. In addition this would lead to an unnecessary delay for in-progress module loads since all
+resolutions would suddently be paused while the new import map is fetched and process. Thus, while it may seem at some theoretical level more correct, it may not be the most practical in real workflows.
+The primary guarantees of correctness to be relied upon is the well-defined nature of immutable map extension and when the individual top-level loads are initiated.
 
 ## Acknowledgements
 
