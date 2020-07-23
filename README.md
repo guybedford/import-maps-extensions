@@ -31,7 +31,8 @@ The following additional proposals are under consideration:
 > Status: Experimental
 
 Specification: https://guybedford.github.io/import-maps-extensions/#parallelizing
-Implementation Status: [Implemented in SystemJS](https://github.com/systemjs/systemjs/pull/2134).
+
+Implementation Status: [Implemented in SystemJS](https://github.com/systemjs/systemjs/pull/2134)
 
 This specifies a new `"depcache"` field in the import map to optimize the latency waterfall of dependency discovery.
 
@@ -78,6 +79,7 @@ The argument here is that most web assets don't typically have this level of enc
 > Status: Experimental
 
 Specification: Pending
+
 Implementation Status: [Implemented in SystemJS](https://github.com/systemjs/systemjs/pull/2215)
 
 This proposal extends the "waiting for import maps" phase from being a single phase at startup to being a phase that can be retriggered at any time during the execution of the page.
