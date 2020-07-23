@@ -107,7 +107,7 @@ There are two fields in import maps for which we need to define the immutable ex
 
 For `"imports"`, the extension is straightforward - if a lazy-loaded map attempts to redefine an existing property of the import map, we throw a validation error.
 
-For `"scopes"`, we hvae to be a little more strict to ensure there are no possible cascades. For example, consider:
+For `"scopes"`, we have to be a little more strict to ensure there are no possible cascades. For example, consider:
 
 ```html
 <script type="importmap">
@@ -151,8 +151,8 @@ As soon as any new `<script type="importmap">` is injected into the HTML page, w
 
 Currently, this state causes any new top-level import operations to wait on this state before proceeding, so by re-triggering this state that same mechanism is reinvoked.
 
-There might still be in-progress module loads in the page, which are still unresolved. This will continue to resolve with the current import map or the extended import
-map depending on timing. As soon as the new import map is fully loaded it will apply to any new module resolutions immediately.
+There might still be in-progress module loads in the page, which are still unresolved. These will continue to resolve with the current import map or the extended import
+map depending on network timing. As soon as the new import map is fully loaded it will apply to any new module resolutions immediately.
 
 There is thus some timing dependency here, but this is mitigated by the fact that import maps are carefully defined to be immutably extensible.
 
