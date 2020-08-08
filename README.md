@@ -56,13 +56,14 @@ An `"integrity"` property in the import map to allow specifying integrity for mo
 
 With the following initial semantics:
 
-1. `<script type="module" integrity="...">` integrity attribute on a module script will take precedence over the import map integrity.
-2. The import map integrity will only apply to modules and not other assets.
+1. The `"integrity"` for any module request is looked up from this import maps integrity attribute whenever there is no integrity specified.
+2. `<script type="module" integrity="...">` integrity attribute on a module script will take precedence over the import map integrity.
+3. The import map integrity will only apply to modules and not other assets.
 
-(1) Ensures that script integrity can still apply for the top-level and initial preload tags. It may be possible to define a way to resolve conflicts
+(2) Ensures that script integrity can still apply for the top-level and initial preload tags. It may be possible to define a way to resolve conflicts
 between these mechanisms, but an override is deemed the simplest proposal initially.
 
-(2) avoids the need to specify the fetch option conditions that the integrity would have to apply to for other assets. It may be possible to relax this constraint
+(3) avoids the need to specify the fetch option conditions that the integrity would have to apply to for other assets. It may be possible to relax this constraint
 in future that integrity can apply to other assets as well, but that would require more carefully defining the associated fetch conditions for which it would apply.
 
 ### Alternatives
