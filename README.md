@@ -29,7 +29,7 @@ The following additional proposals are under consideration:
 
 ## Integrity
 
-> Status: Specification Pending, Implemented in ES Module Shims and SystemJS
+> Status: Specification Pending, Implemented in SystemJS
 
 ### Problem Statement
 
