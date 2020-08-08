@@ -18,6 +18,7 @@ for import maps as the feature in browsers continues to evolve over time.
 
 Currently the following new features have been [specified in this proposal](https://guybedford.github.io/import-maps-extensions/):
 
+* [Specyfing module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
@@ -26,9 +27,57 @@ The following additional proposals are under consideration:
 * `import:` URL support (https://github.com/WICG/import-maps/issues/149)
 * Supporting import maps for other execution environments such as Web Workers (https://github.com/WICG/import-maps/issues/2)
 
+## Integrity
+
+> Status: Specification Pending, Implemented in ES Module Shims and SystemJS
+
+### Problem Statement
+
+Since modules initiate requests, there is a need for the ability to specify the integrity of dependencies, and not just the top level `<script type="module">` integrity which can be supported
+via traditional means.
+
+For specifiers like `import 'pkg'` that are controlled by import maps, the problem is that the import map is fully responsible for the resolved module and hence the integrity of the resolved module as well.
+
+Without a mechanism to specify integrity, it is not currently possible to use module dependencies with `require-sri-for` Content Security Policy where those module dependencies are loaded lazily so that
+the integrity cannot be set via the module script tag or link preload tag directly.
+
+### Proposal
+
+An `"integrity"` property in the import map to allow specifying integrity for modules URLs:
+
+```js
+{
+  "integrity": {
+    "/module.js": "sha384-...",
+    "https://site.com/dep.js": "sha384-..."
+  }
+}
+```
+
+With the following initial semantics:
+
+1. `<script type="module" integrity="...">` integrity attribute on a module script will take precedence over the import map integrity.
+2. The import map integrity will only apply to modules and not other assets.
+
+(1) Ensures that script integrity can still apply for the top-level and initial preload tags. It may be possible to define a way to resolve conflicts
+between these mechanisms, but an override is deemed the simplest proposal initially.
+
+(2) avoids the need to specify the fetch option conditions that the integrity would have to apply to for other assets. It may be possible to relax this constraint
+in future that integrity can apply to other assets as well, but that would require more carefully defining the associated fetch conditions for which it would apply.
+
+### Alternatives
+
+An alternative to an import map based proposal would be a more general integrity manifest applying to all types of web assets. The concern is that it is only really lazy
+loaded content that this integrity system is required for as in-band techniques as used currently work fine for the static use cases.
+
+For lazy loading of other non-module assets such as stylesheets and images, in-band integrity can still apply since the dynamic injection of tags can support this fine.
+
+By focusing only on the missing piece for modules we reduce the scope of the problem and solve the very specific issue for modules on the web which is that full integrity
+for deep lazy module trees is not currently possible and that this is a problem unique to module graphs.
+
 ## Depcache
 
-> Status: Experimental
+> Status: Draft Specification, Implemented in ES Module Shims and SystemJS
 
 Specification: https://guybedford.github.io/import-maps-extensions/#parallelizing
 
