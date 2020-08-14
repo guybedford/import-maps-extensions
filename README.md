@@ -11,14 +11,14 @@ In the process of attaining this stability a number of future features were deem
 ## Motivation
 
 Due to the original import maps group seeking stability, this proposal was created to enable ongoing collaboration and discussion to
-explore possible extensions such as the above, with the goal to move towards finalizing future specifications
+explore possible extensions such as those listed below, with the goal to move towards finalizing future specifications
 for import maps as the feature in browsers continues to evolve over time.
 
 ## Proposals
 
 Currently the following new features have been [specified in this proposal](https://guybedford.github.io/import-maps-extensions/):
 
-* [Specyfing module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
+* [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
