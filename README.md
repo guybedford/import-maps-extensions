@@ -154,7 +154,7 @@ The above is enough to provide a simple package-level capability permissions mod
 
 ### Alternatives
 
-The alternative is for a separate mapping system to handle the security lockdown of the resolver. This proposal exactly comes out of realising that the Node.js Policy ended up implementing mappings and scopes very similarly to import maps as part of its development and that unification might provide a path to create a security primitive from the start rather than "security as an addon".
+The alternative is for a separate mapping system to handle the security lockdown of the resolver. This proposal exactly comes out of realising that the Node.js Policy ended up implementing mappings and scopes very similarly to import maps as part of its development and that unification might provide a path to create a security primitive from the start rather than "security as an afterthought".
 
 ## Lazy Loading of Import Maps
 
