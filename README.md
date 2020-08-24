@@ -20,6 +20,7 @@ Currently the following new features have been [specified in this proposal](http
 
 * [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
+* [Secure Scopes: Enabling SES-style modular security](#secure-scopes)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
 The following additional proposals are under consideration:
@@ -123,6 +124,37 @@ With the dependency cache populated, any time a load to `import('a')` is made, t
 An alternative approach discussed as been a more general preload manifest that can work for all types of web assets.
 
 The argument here is that most web assets don't typically have this level of encapsulation depth, and that this is a problem that surfaces uniquely to modules.
+
+## Secure Scopes
+
+> Status: Experimental
+
+Specification: Pending
+
+Implementation Status: Pending
+
+This proposal is about enabling resolution-level security properties through import maps.
+
+### Problem Statement
+
+SES (Secure ECMAScript) lays [out a model](https://github.com/tc39/proposal-ses) for a resolver-level capability security model.
+
+With a small tweak, these security properties can be full handled by import maps.
+
+### Proposal
+
+The proposal is to provide a new `"secureScopes": true` boolean in the import map, which when enabled treats each scope as a sort of compartment.
+
+This means that:
+
+1. Scopes cannot import URLs outside of the scope, unless those URLs were accessed via bare specifier mappings from within the scope.
+2. Scopes do not exhibit fallback behaviours - if there is no match for a given import, an error is thrown, rather than checking parent scopes and `"imports"`.
+
+The above is enough to provide a simple package-level capability permissions model through import maps.
+
+### Alternatives
+
+The alternative is for a separate mapping system to handle the security lockdown of the resolver. This proposal exactly comes out of realising that the Node.js Policy ended up implementing mappings and scopes very similarly to import maps as part of its development and that unification might provide a path to create a security primitive from the start rather than "security as an addon".
 
 ## Lazy Loading of Import Maps
 
