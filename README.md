@@ -20,7 +20,7 @@ Currently the following new features have been [specified in this proposal](http
 
 * [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
-* [Secure Scopes: Enabling SES-style modular security](#secure-scopes)
+* [Secure Scopes: Ensuring modular scope integrity](#secure-scopes)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
 The following additional proposals are under consideration:
@@ -133,24 +133,24 @@ Specification: Pending
 
 Implementation Status: Pending
 
-This proposal is about enabling resolution-level security properties through import maps.
+This proposal is about enabling resolution-level integrity properties through import maps.
 
 ### Problem Statement
 
-SES (Secure ECMAScript) lays [out a model](https://github.com/tc39/proposal-ses) for a resolver-level capability security model.
+Import maps act as the source of truth for resolution. With a small extension their mandate to also act as the comprehensive source of truth for what can be imported, we effectively are able to treat it as a form of resolution lock and know without doubt that scopes cannot import from other scopes they have not been given access to.
 
-With a small tweak, these security properties can be full handled by import maps.
+The idea is that within a package scope, loading URLs that are child URLs of the package scope itself is fine, but loading URLs that are on other origins or other base-level scopes would be a violation of authority, unless those mappings are explicitly provided through the scope map.
 
 ### Proposal
 
-The proposal is to provide a new `"secureScopes": true` boolean in the import map, which when enabled treats each scope as a sort of compartment.
+The proposal is to provide a new `"secureScopes": true` boolean in the import map, which when enabled treats each scope as being a comprehensively mapped scope.
 
 This means that:
 
-1. Scopes cannot import URLs outside of the scope, unless those URLs were accessed via bare specifier mappings from within the scope.
+1. Scopes cannot import URLs that are not child URLs of the scope itself, or explicit bare specifier mappings enabled within the scope.
 2. Scopes do not exhibit fallback behaviours - if there is no match for a given import, an error is thrown, rather than checking parent scopes and `"imports"`.
 
-The above is enough to provide a simple package-level capability permissions model through import maps.
+The above is enough to provide a simple package-level guarantees locking down importer escalations with the import map.
 
 ### Alternatives
 
