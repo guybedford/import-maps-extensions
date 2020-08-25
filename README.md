@@ -20,7 +20,7 @@ Currently the following new features have been [specified in this proposal](http
 
 * [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
-* [Secure Scopes: Ensuring modular scope integrity](#secure-scopes)
+* [Isolated Scopes: Ensuring modular scope isolation](#isolated-scopes)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
 The following additional proposals are under consideration:
@@ -125,7 +125,7 @@ An alternative approach discussed as been a more general preload manifest that c
 
 The argument here is that most web assets don't typically have this level of encapsulation depth, and that this is a problem that surfaces uniquely to modules.
 
-## Secure Scopes
+## Isolated Scopes
 
 > Status: Experimental
 
@@ -133,24 +133,24 @@ Specification: Pending
 
 Implementation Status: Pending
 
-This proposal is about enabling resolution-level integrity properties through import maps.
+This proposal is about enabling resolution-level isolation properties through import maps.
 
 ### Problem Statement
 
-Import maps act as the source of truth for resolution. With a small extension their mandate to also act as the comprehensive source of truth for what can be imported, we effectively are able to treat it as a form of resolution lock and know without doubt that scopes cannot import from other scopes they have not been given access to.
+Import maps act as the source of truth for resolution. With a small extension to their mandate to also act as the comprehensive source of truth for what can be imported, we effectively are able to treat it as a form of resolution isolation to know without doubt that scopes cannot import from other scopes they have not been given access to.
 
-The idea is that within a package scope, loading URLs that are child URLs of the package scope itself is fine, but loading URLs that are on other origins or other base-level scopes would be a violation of authority, unless those mappings are explicitly provided through the scope map.
+The idea is that within a package scope, loading URLs that are child URLs of the package scope itself is permitted, but loading URLs on other origins or outside of the base-level scope would be a violation of this isolation authority, unless those mappings are explicitly provided through the scope map.
 
 ### Proposal
 
-The proposal is to provide a new `"secureScopes": true` boolean in the import map, which when enabled treats each scope as being a comprehensively mapped scope.
+The proposal is to provide a new `"isolatedScopes": true` boolean in the import map, which when enabled treats each scope as being a comprehensively isolated scope.
 
-This means that:
+An isolated scope then has the following rules:
 
 1. Scopes cannot import URLs that are not child URLs of the scope itself, or explicit bare specifier mappings enabled within the scope.
 2. Scopes do not exhibit fallback behaviours - if there is no match for a given import, an error is thrown, rather than checking parent scopes and `"imports"`.
 
-The above is enough to provide a simple package-level guarantees locking down importer escalations with the import map.
+The above is enough to provide simple package-level guarantees locking down importer isolation escalations with the import map.
 
 ### Alternatives
 
