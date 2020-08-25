@@ -149,6 +149,7 @@ An isolated scope then has the following rules:
 
 1. Scopes cannot import URLs that are not child URLs of the scope itself, or explicit bare specifier mappings enabled within the scope.
 2. Scopes do not exhibit fallback behaviours - if there is no match for a given import, an error is thrown, rather than checking parent scopes and `"imports"`.
+3. Isolated scopes do not permit URL mappings. This way it is easy to security audit an isolated scope since only explicit URLs and bare module specifiers need be considered to analyze the membrane boundary, rather than there also being a submapping scheme within the URL space itself. Previously discussed at https://github.com/WICG/import-maps/issues/198.
 
 The above is enough to provide simple package-level guarantees locking down importer isolation escalations with the import map.
 
