@@ -27,6 +27,7 @@ The following additional proposals are under consideration:
 
 * `import:` URL support (https://github.com/WICG/import-maps/issues/149)
 * Supporting import maps for other execution environments such as Web Workers (https://github.com/WICG/import-maps/issues/2)
+* Conditional maps - the ability to have conditional branching in import maps, similar to [Node.js package exports](https://nodejs.org/dist/latest-v14.x/docs/api/esm.html#esm_conditional_exports) (https://github.com/WICG/import-maps/issues/55)
 
 ## Integrity
 
