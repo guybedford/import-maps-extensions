@@ -78,54 +78,6 @@ For lazy loading of other non-module assets such as stylesheets and images, in-b
 By focusing only on the missing piece for modules we reduce the scope of the problem and solve the very specific issue for modules on the web which is that full integrity
 for deep lazy module trees is not currently possible and that this is a problem unique to module graphs.
 
-## Depcache
-
-> Status: Draft Specification, Implemented in ES Module Shims and SystemJS
-
-Specification: https://guybedford.github.io/import-maps-extensions/#parallelizing
-
-Implementation Status: [Implemented in SystemJS](https://github.com/systemjs/systemjs/pull/2134)
-
-This specifies a new `"depcache"` field in the import map to optimize the latency waterfall of dependency discovery.
-
-### Problem Statement
-
-Import maps form a source-of-truth for the resolution of bare module specifiers in browsers.
-
-Dependency trees, by their nature, are designed to support arbitrary depths of dependency discovery - package A might import package B might import package C.
-
-In addition, lazy loading of modules is a first-class feature in browsers through dynamic `import()` providing performance benefits in minimizing the code executed on initial page load.
-
-The problem is that `import('A')` will first have to send a request over the network, before it knows that it will need to import package B, and in turn the same again for package C, incurring an unnecessary latency cost which is proportional to the dependency tree depth.
-
-### Proposal
-
-The proposal is for modules to be able to directly declare a _dependency cache_ upfront in the import map, as an optimization artifact created at build time (since import maps are populated by build time processes anyway):
-
-```html
-<script type="importmap">
-{
-  "imports": {
-    "a": "/package-a.js",
-    "b": "/package-b.js",
-    "c": "/package-c.js"
-  },
-  "depcache": {
-    "/package-a.js": ["b"],
-    "/package-b.js": ["c"]
-  }
-}
-</script>
-```
-
-With the dependency cache populated, any time a load to `import('a')` is made, the browser is able to infer the deep dependency tree before the network request completes, and thus send out network requests to packages A, B and C in parallel avoiding the latency waterfall.
-
-### Alternatives
-
-An alternative approach discussed as been a more general preload manifest that can work for all types of web assets.
-
-The argument here is that most web assets don't typically have this level of encapsulation depth, and that this is a problem that surfaces uniquely to modules.
-
 ## Isolated Scopes
 
 > Status: Experimental
