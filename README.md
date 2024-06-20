@@ -82,6 +82,7 @@ import map for the worker can be provided explicitly:
 
 ```js
 new Worker(path, {
+  type: 'module',
   importMap: {
     imports: {
       "pkg": "/path/to/pkg.js"
@@ -97,6 +98,7 @@ Alternatively, we could support a string variation of the option that effectivel
 
 ```js
 new Worker(path, {
+  type: 'module',
   importMap: 'inherit'
 });
 ```
