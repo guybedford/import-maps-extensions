@@ -4,7 +4,7 @@ _Extending the [import maps](https://github.com/wicg/import-maps) proposal._
 
 ## Introduction
 
-The [import maps](https://github.com/wicg/import-maps) proposal is now feature-complete and working towards a stable specification and release in browsers.
+The [import maps](https://github.com/wicg/import-maps) proposal is considered feature-complete with a largely stable specification and implementation browsers.
 
 In the process of attaining this stability a number of future features were deemed out of scope for the specification.
 
@@ -19,19 +19,16 @@ for import maps as the feature in browsers continues to evolve over time.
 Currently the following new features have been [specified in this proposal](https://guybedford.github.io/import-maps-extensions/):
 
 * [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
+* [Worker import maps](#worker-import-maps) (https://github.com/WICG/import-maps/issues/2)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
 * [Isolated Scopes: Ensuring modular scope isolation](#isolated-scopes)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
 
-The following additional proposals are under consideration:
-
-* `import:` URL support (https://github.com/WICG/import-maps/issues/149)
-* Supporting import maps for other execution environments such as Web Workers (https://github.com/WICG/import-maps/issues/2)
-* Conditional maps - the ability to have conditional branching in import maps, similar to [Node.js package exports](https://nodejs.org/dist/latest-v14.x/docs/api/esm.html#esm_conditional_exports) (https://github.com/WICG/import-maps/issues/55)
-
 ## Integrity
 
-> Status: Specification Pending, Implemented in SystemJS
+> Status: Upstreamed into HTML, Implemented in Chrome.
+
+Latest Specification: https://github.com/whatwg/html/pull/10269
 
 ### Problem Statement
 
@@ -68,15 +65,54 @@ between these mechanisms, but an override is deemed the simplest proposal initia
 (3) avoids the need to specify the fetch option conditions that the integrity would have to apply to for other assets. It may be possible to relax this constraint
 in future that integrity can apply to other assets as well, but that would require more carefully defining the associated fetch conditions for which it would apply.
 
+## Worker Import Maps
+
+> Status: Initial Proposal
+
+### Problem Statement
+
+Import maps only apply to the main application thread, and any workers created via `new Worker(path)` will never share the import map resolutions.
+
+When writing modular applications that rely on import map resolutions, any code running in a worker cannot utilize import maps at all.
+
+### Proposal
+
+The proposal is to allow supporting import maps in workers, with a new `importMap` attribute for the worker instantiation options, where the
+import map for the worker can be provided explicitly:
+
+```js
+new Worker(path, {
+  type: 'module',
+  importMap: {
+    imports: {
+      "pkg": "/path/to/pkg.js"
+    }
+  }
+});
+```
+
+If the import map for the main application is to be shared with the worker, then this would require the ability to get the current
+import map in serialized form.
+
+Alternatively, we could support a string variation of the option that effectively performs this operation:
+
+```js
+new Worker(path, {
+  type: 'module',
+  importMap: 'inherit'
+});
+```
+
+where the semantics of `'inherit'` would exactly be to get the serialized import map from the current context, and pass it into the worker.
+
 ### Alternatives
 
-An alternative to an import map based proposal would be a more general integrity manifest applying to all types of web assets. The concern is that it is only really lazy
-loaded content that this integrity system is required for as in-band techniques as used currently work fine for the static use cases.
+An alternative design could be to only support `importMap: 'inherits' | 'blank'` and instead have a new API for setting the import map.
 
-For lazy loading of other non-module assets such as stylesheets and images, in-band integrity can still apply since the dynamic injection of tags can support this fine.
+Instead of the worker having its own entire import map data structure, it could also be an option to treat the import map as data in shared memory,
+where if there were APIs for mutating import maps in future, this would share between workers.
 
-By focusing only on the missing piece for modules we reduce the scope of the problem and solve the very specific issue for modules on the web which is that full integrity
-for deep lazy module trees is not currently possible and that this is a problem unique to module graphs.
+For now, serialization and copying seems to provide the simplest semantics unless there are strong arguments for either of the above.
 
 ## Depcache
 
