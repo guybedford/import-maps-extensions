@@ -20,6 +20,7 @@ Currently the following new features have been [specified in this proposal](http
 
 * [Specifyng module integrity](#integrity) (https://github.com/WICG/import-maps/issues/221)
 * [Worker import maps](#worker-import-maps) (https://github.com/WICG/import-maps/issues/2)
+* [External import maps](#external-import-maps) (https://github.com/WICG/import-maps/issues/235)
 * [Depcache: Optimizing the unbounded latency cost of deep dependency discovery](#depcache) (https://github.com/WICG/import-maps/issues/21)
 * [Isolated Scopes: Ensuring modular scope isolation](#isolated-scopes)
 * [Supporting lazy-loading of import maps](#lazy-loading-of-import-maps) (https://github.com/WICG/import-maps/issues/19)
@@ -105,14 +106,43 @@ new Worker(path, {
 
 where the semantics of `'inherit'` would exactly be to get the serialized import map from the current context, and pass it into the worker.
 
+If [external import maps](#external-import-maps) are supported, then `importMap` may permit a URL string value:
+
+```js
+new Worker(path, {
+  type: 'module',
+  importMap: '/importmap.json'
+});
+```
+
+Where the string `'inherit'` would effectively be an exclusion before applying the URL parser.
+
+For supporting Service Worker and Dedicated Worker import maps, URLs may well be desired to allow import map updates for service workers, and
+to allow easier worker coalescing between dedicated worker instantiations, which may otherwise need to use a hash of the import map as part of
+the guarantee for dedicated worker identity.
+
+In the mean time, while `importMap` URLs are not supported, it might make sense to explicitly disallow `importMap` for Service Workers and Dedicated
+Workers.
+
 ### Alternatives
 
 An alternative design could be to only support `importMap: 'inherits' | 'blank'` and instead have a new API for setting the import map.
 
-Instead of the worker having its own entire import map data structure, it could also be an option to treat the import map as data in shared memory,
-where if there were APIs for mutating import maps in future, this would share between workers.
+Instead of the worker having its own entire import map data structure, it could also be an option to treat the import map as shared data
+between the workers. The import map must then be synchronized between the threads, and the transition into
+[import maps allowed](https://html.spec.whatwg.org/multipage/webappapis.html#import-maps-allowed) being set to false must also be synchronized
+between threads.
 
-For now, serialization and copying seems to provide the simplest semantics unless there are strong arguments for either of the above.
+To avoid the synchronization complexities, for now, serialization and copying seems to provide the simplest semantics unless there are
+strong arguments for either of the above.
+
+## External Import Maps
+
+> Status: Formerly specified in import maps (https://github.com/WICG/import-maps/blob/e2eceb7ac3b7497e1f6c7f06cd86d7177da9a799/spec.bs#L241), not upstreamed to HTML
+
+This feature is fully described in the original import maps spec repo at https://github.com/WICG/import-maps/tree/main?tab=readme-ov-file#installation.
+
+Remotivation and specification work may be driven within this effort further in future.
 
 ## Depcache
 
